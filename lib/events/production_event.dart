@@ -1,0 +1,5 @@
+
+enum ProductionEvent {
+  EDIT,
+  DELETE
+}
