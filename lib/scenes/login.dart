@@ -1,6 +1,6 @@
 import 'package:exercise_example/base/screen_base.dart';
 import 'package:exercise_example/scenes/home.dart';
-import 'package:exercise_example/widgets/product_item.dart';
+import 'package:exercise_example/scenes/registration.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,10 +13,15 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends WidgetBase<LoginScreen> {
+  final _usernameFormKey = GlobalKey<FormState>();
+  final _passwordFormKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login Screen')),
+      appBar: AppBar(title: const Text('Login Screen'), actions: [IconButton(onPressed: () {
+        pushScreen(RegisterScreen());
+      }, icon: Icon(Icons.app_registration))]),
       body: Stack(
         children: [
           Image.network(
@@ -39,26 +44,54 @@ class _LoginScreen extends WidgetBase<LoginScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Enter your username'
+                      child: Form(
+                        key: _usernameFormKey,
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              labelText: 'Enter your username'
+                          ),
+                          validator: (value) {
+                            if(value == null || value.trim().isEmpty) {
+                              return 'Username is required';
+                            }
+
+                            return null;
+                          },
                         ),
-                      ),
+                      )
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Enter your password'
+                      child: Form(
+                        key: _passwordFormKey,
+                        child: TextFormField(
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
+                          decoration: const InputDecoration(
+                              border: UnderlineInputBorder(),
+                              labelText: 'Enter your password'
+                          ),
+                          validator: (value) {
+                            if(value == null || value.trim().isEmpty) {
+                              return 'Password is required';
+                            }
+
+                            return null;
+                          },
                         ),
-                      ),
+                      )
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                       child: OutlinedButton(onPressed: () {
-                        pushScreen(HomeScreen());
+                        final isPassUser = _usernameFormKey.currentState!.validate();
+                        final isPassPassword = _passwordFormKey.currentState!.validate();
+
+                        if (isPassUser && isPassPassword) {
+                          pushScreen(HomeScreen());
+                        }
                       }, child: Text('Submit')),
                     )
                   ],

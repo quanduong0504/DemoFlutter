@@ -1,5 +1,6 @@
 import 'package:exercise_example/base/screen_base.dart';
 import 'package:exercise_example/models/product.dart';
+import 'package:exercise_example/widgets/material_textfield.dart';
 import 'package:flutter/material.dart';
 
 class AddProductScreen extends StatefulWidget {
@@ -11,6 +12,13 @@ class AddProductScreen extends StatefulWidget {
   final _subTitleEditingController = TextEditingController();
   final _nameEditingController = TextEditingController();
   final _priceEditingController = TextEditingController();
+
+  final _titleValidateKey = GlobalKey<FormState>();
+  final _subTitleValidateKey = GlobalKey<FormState>();
+  final _nameValidateKey = GlobalKey<FormState>();
+  final _priceValidateKey = GlobalKey<FormState>();
+
+  final _titleValidatorKey = GlobalKey<MaterialTextFormFieldState>();
 
   @override
   State<StatefulWidget> createState() {
@@ -32,6 +40,19 @@ class _AddProductScreen extends WidgetBase<AddProductScreen> {
         widget._titleEditingController.text, widget._subTitleEditingController.text,
         widget._nameEditingController.text, widget._priceEditingController.text);
   }
+  
+  void _onValidateInput() {
+    final isValidatorTitle = widget._titleValidateKey.currentState!.validate();
+    final isValidatorSubTitle = widget._subTitleValidateKey.currentState!.validate();
+    final isValidatorName = widget._nameValidateKey.currentState!.validate();
+    final isValidatorPrice = widget._priceValidateKey.currentState!.validate();
+
+    if(isValidatorTitle && isValidatorSubTitle && isValidatorName && isValidatorPrice) {
+      Navigator.pop(context, _getProductFromInput());
+    } else {
+      showSnackBar('You need to enter enough information');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,52 +70,72 @@ class _AddProductScreen extends WidgetBase<AddProductScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.all(12),
-                  child: Text('Add product to cart', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: TextFormField(
-                    controller: widget._titleEditingController,
-                    decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Title'
-                    ),
+                  child: Text(
+                      widget._production == null ? 'Add product to cart' : 'Update product to cart',
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold), textAlign: TextAlign.center
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: TextFormField(
-                    controller: widget._subTitleEditingController,
-                    decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Subtitle'
+                  child: Form(
+                    key: widget._titleValidateKey,
+                    child: TextFormField(
+                      controller: widget._titleEditingController,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Title'
+                      ),
+                      validator: (value) => _onValidate(value, 'Title is required'),
                     ),
-                  ),
+                  )
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: TextFormField(
-                    controller: widget._nameEditingController,
-                    decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Name'
+                  child: Form(
+                    key: widget._subTitleValidateKey,
+                    child: TextFormField(
+                      controller: widget._subTitleEditingController,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Subtitle'
+                      ),
+                      validator: (value) => _onValidate(value, 'SubTitle is required'),
                     ),
-                  ),
+                  )
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: TextFormField(
-                    controller: widget._priceEditingController,
-                    decoration: const InputDecoration(
-                        border: UnderlineInputBorder(),
-                        labelText: 'Price'
+                  child: Form(
+                    key: widget._nameValidateKey,
+                    child: TextFormField(
+                      controller: widget._nameEditingController,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Name'
+                      ),
+                      validator: (value) => _onValidate(value, 'Name is required'),
                     ),
-                  ),
+                  )
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                  child: Form(
+                    key: widget._priceValidateKey,
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: widget._priceEditingController,
+                      decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          labelText: 'Price'
+                      ),
+                      validator: (value) => _onValidate(value, 'Price is required'),
+                    ),
+                  )
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                   child: OutlinedButton(onPressed: () {
-                    Navigator.pop(context, _getProductFromInput());
+                    _onValidateInput();
                   }, child: Text(widget._production == null ? 'Create' : 'Update')),
                 )
               ],
@@ -102,5 +143,13 @@ class _AddProductScreen extends WidgetBase<AddProductScreen> {
         )
       )
     );
+  }
+
+  String? _onValidate(String? value, String msgError) {
+    if(value == null || value.isEmpty) {
+      return msgError;
+    }
+
+    return null;
   }
 }

@@ -1,5 +1,6 @@
 
 enum ProductionEvent {
   EDIT,
-  DELETE
+  DELETE,
+  FAVORITE
 }

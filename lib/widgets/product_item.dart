@@ -4,10 +4,11 @@ import 'package:exercise_example/events/production_event.dart';
 import 'package:exercise_example/models/product.dart';
 import 'package:exercise_example/models/product_actions.dart';
 import 'package:exercise_example/scenes/add_product.dart';
+import 'package:exercise_example/scenes/detail_product.dart';
 import 'package:flutter/material.dart';
 
 class ProductItem extends StatefulWidget {
-  static const FB_AVATAR = 'https://scontent.fhan2-2.fna.fbcdn.net/v/t39.30808-6/268943472_2757422471069863_2499904932263833300_n.jpg?_nc_cat=106&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=PHFgwTGrr3UAX8Q-FoG&_nc_ht=scontent.fhan2-2.fna&oh=00_AT9EZXTR2cxzYL7vZDdBg5hEp-lArAnTR_qTI8HyPnNF9w&oe=61DFD3F2';
+  static const FB_AVATAR = 'https://scontent.fhan5-2.fna.fbcdn.net/v/t39.30808-6/271547255_4762969830497176_7735263019609657449_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=730e14&_nc_ohc=Rweh_TSkwFIAX9d0VyM&_nc_ht=scontent.fhan5-2.fna&oh=00_AT_W0SZGnKsjGqHvTEI7A1f2ztDmgAPREOKLnx8FKAYB6w&oe=61E0B07B';
   final Production _production;
   final GlobalKey _optionsKey = GlobalKey();
   final Function onItemListener;
@@ -58,95 +59,109 @@ class _ProductItem extends WidgetBase<ProductItem> {
     widget.onItemListener(ProductActions(widget._production, ProductionEvent.DELETE));
   }
 
+  void _updateFavorite(bool isFavorite) {
+    setState(() {
+      widget._production.isFavorite = isFavorite;
+      widget.onItemListener(ProductActions(widget._production, ProductionEvent.FAVORITE));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      elevation: 6,
-      margin: EdgeInsets.all(12),
-      child: IntrinsicHeight(
-        child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                  flex: 3,
-                  child: ClipRRect(
-                      child: AspectRatio(
-                          aspectRatio: 16/9,
-                          child: Image.network(ProductItem.FB_AVATAR, fit: BoxFit.fill)
-                      ),
-                      borderRadius: BorderRadius.circular(6),
-                  )
-              ),
-              Expanded(
-                  flex: 7,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                        child: Text(widget._production.title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold))
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                        child: Text(widget._production.subTitle, style: TextStyle(fontSize: 13))
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                        child: Text(widget._production.name, style: TextStyle(fontSize: 13)),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                        child: Text(widget._production.price, style: TextStyle(fontSize: 13))
-                      ),
-                    ],
-                  )
-              ),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Material(
-                          child: InkWell(
-                            key: widget._optionsKey,
-                            borderRadius: BorderRadius.circular(30),
-                            onTap: () {
-                              final box = widget._optionsKey.currentContext?.findRenderObject() as RenderBox;
-                              final position = box.localToGlobal(Offset.zero);
-                              _showPopupMenu(position);
-                            },
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 5),
-                                child: Image.asset('assets/images/icon_options.png', width: 24, height: 24)
-                            ),
+    return InkWell(
+      child: Card(
+          borderOnForeground: true,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          elevation: 3,
+          margin: EdgeInsets.only(top: 12, left: 12, right: 12),
+          child: IntrinsicHeight(
+              child: Padding(
+                padding: EdgeInsets.all(12),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                        flex: 3,
+                        child: ClipRRect(
+                          child: AspectRatio(
+                              aspectRatio: 16/9,
+                              child: Image.network(ProductItem.FB_AVATAR, fit: BoxFit.fill)
                           ),
-                        ),
-                        Expanded(child: Container()),
-                        Material(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(30),
-                            onTap: () {
-                              setState(() {
-                                widget._production.updateFavorite();
-                              });
-                            },
-                            child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 8),
-                                child: Icon(widget._production.isFavorite ? Icons.favorite : Icons.favorite_border, size: 18)
+                          borderRadius: BorderRadius.circular(6),
+                        )
+                    ),
+                    Expanded(
+                        flex: 7,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                child: Text(widget._production.title, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis)
                             ),
-                          ),
-                        ),
-                      ]
-                  )
+                            Padding(
+                                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                child: Text(widget._production.subTitle, style: TextStyle(fontSize: 13, fontWeight: FontWeight.w800), maxLines: 1, overflow: TextOverflow.ellipsis)
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                              child: Text(widget._production.name, style: TextStyle(fontSize: 13), maxLines: 1, overflow: TextOverflow.ellipsis),
+                            ),
+                            Padding(
+                                padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                                child: Text('Price: \$ ${widget._production.price}', style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic), maxLines: 1, overflow: TextOverflow.ellipsis)
+                            ),
+                          ],
+                        )
+                    ),
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Material(
+                                child: InkWell(
+                                  key: widget._optionsKey,
+                                  borderRadius: BorderRadius.circular(30),
+                                  onTap: () {
+                                    final box = widget._optionsKey.currentContext?.findRenderObject() as RenderBox;
+                                    final position = box.localToGlobal(Offset.zero);
+                                    _showPopupMenu(position);
+                                  },
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 5),
+                                      child: Image.asset('assets/images/icon_options.png', width: 24, height: 24)
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Material(
+                                child: InkWell(
+                                  borderRadius: BorderRadius.circular(30),
+                                  onTap: () {
+                                    setState(() {
+                                      widget._production.updateFavorite();
+                                      widget.onItemListener(ProductActions(widget._production, ProductionEvent.FAVORITE));
+                                    });
+                                  },
+                                  child: Padding(
+                                      padding: EdgeInsets.symmetric(vertical: 8),
+                                      child: Icon(widget._production.isFavorite ? Icons.favorite : Icons.favorite_border, size: 18, color: Colors.pink)
+                                  ),
+                                ),
+                              ),
+                            ]
+                        )
+                    )
+                  ],
+                ),
               )
-            ],
-          ),
-        )
-      )
+          )
+      ),
+      onTap: () {
+        pushScreen(DetailProduct(widget._production, _updateFavorite));
+      },
     );
   }
 }
