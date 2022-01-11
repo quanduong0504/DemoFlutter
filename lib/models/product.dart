@@ -7,8 +7,9 @@ class Production {
   String price;
   bool isFavorite = false;
 
-  Production(this.id, this.title, this.subTitle, this.name, this.price);
+  static final columns = ["id", "title", "subTitle", "name", "price", "isFavorite"];
 
+  Production(this.id, this.title, this.subTitle, this.name, this.price);
 
   Production.createJs(this.id, this.title, this.subTitle, this.name, this.price, this.isFavorite);
 
@@ -16,14 +17,14 @@ class Production {
     this.isFavorite = !this.isFavorite;
   }
 
-  factory Production.fromJson(Map<String, dynamic> parsedJson) {
+  factory Production.fromJson(Map<dynamic, dynamic> parsedJson) {
     return Production.createJs(
         parsedJson['id'],
         parsedJson['title'],
         parsedJson['subTitle'],
         parsedJson['name'],
         parsedJson['price'],
-        parsedJson['isFavorite']
+        parsedJson['isFavorite'] == 1 ? true : false
     );
   }
 
@@ -33,6 +34,6 @@ class Production {
     'subTitle': subTitle.toString(),
     'name': name.toString(),
     'price': price.toString(),
-    'isFavorite': isFavorite
+    'isFavorite': isFavorite ? 1 : 2
   };
 }

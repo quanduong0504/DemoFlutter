@@ -1,7 +1,6 @@
 
-import 'dart:convert';
-
 import 'package:exercise_example/base/screen_base.dart';
+import 'package:exercise_example/database/database.dart';
 import 'package:exercise_example/events/production_event.dart';
 import 'package:exercise_example/models/product.dart';
 import 'package:exercise_example/models/product_actions.dart';
@@ -19,27 +18,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreen extends WidgetBase<HomeScreen> {
-  void _getDataFromPrefs() {
-    widget._productions.clear();
-    getPrefs<List>(WidgetBase.PREFS_PRODUCTION, (result) {
-      if(result != null) {
-        List<String> items = result;
-
-        setState(() {
-          widget._productions.addAll(
-              items.map((e) => Production.fromJson(json.decode(e))).toList()
-          );
-        });
-      }
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getDataFromPrefs();
-  }
-
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -54,49 +32,75 @@ class _HomeScreen extends WidgetBase<HomeScreen> {
               ))
             ],
         ),
-        body: widget._productions.length == 0 ?
-            Center(child: Text('Empty data')) :
-            ListView.builder(
-              itemCount: widget._productions.length,
+        body: FutureBuilder<List<Production>>(
+          future: ProductionDB.db.getProducts(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) print(snapshot.error);
+            if(snapshot.hasData) {
+              widget._productions.clear();
+              widget._productions.addAll(snapshot.data!);
+              return widget._productions.length == 0 ?
+              Center(child: Text('Empty data')) :
+              ListView.builder(
+                itemCount: widget._productions.length,
                 itemBuilder: (context, index) => ProductItem(widget._productions[index], (p) {
-              onItemResultListener(p, index);
-            }),
-        ),
+                  onItemResultListener(p, index);
+                }),
+              );
+            }else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        )
       );
   }
 
   void onItemResultListener(ProductActions productActions, int index) {
     switch(productActions.event) {
       case ProductionEvent.EDIT:
-        setState(() {
-          widget._productions[index] = productActions.production;
-          _updateItemsToLocal();
-        });
+      case ProductionEvent.FAVORITE:
+        _onUpdateProductItem(productActions.production, index);
         break;
       case ProductionEvent.DELETE:
-        setState(() {
-          widget._productions.removeAt(index);
-          _updateItemsToLocal();
-        });
-        break;
-      case ProductionEvent.FAVORITE:
-        _updateItemsToLocal();
+        _onDeleteProductItem(productActions.production, index);
         break;
     }
   }
 
-  void _onAddResult(Production production) {
-    setState(() {
-      production.id = widget._productions.length == 0 ? 0 : widget._productions.last.id + 1;
-      widget._productions.add(production);
-      _updateItemsToLocal();
+  void _onUpdateProductItem(Production production, int index) async {
+    final success = await ProductionDB.db.update(production);
+
+    if(success) {
+      setState(() {
+        widget._productions[index] = production;
+      });
+    }
+  }
+
+  void _onDeleteProductItem(Production production, int index) async {
+    final success = await ProductionDB.db.delete(production);
+
+    if(success) {
+      setState(() {
+        widget._productions.removeAt(index);
+      });
+    }
+  }
+
+  void _getWeatherData() {
+    final params = Map<String, dynamic>();
+    params[''] = 0;
+
+    getAsync('https://api.openweathermap.org/data/2.5/onecall', params, (r) {
+
     });
   }
-  
-  void _updateItemsToLocal() {
-    putPrefs(
-        WidgetBase.PREFS_PRODUCTION,
-        widget._productions.map((e) => jsonEncode(e.toJson())).toList(), () {}
-    );
+
+  void _onAddResult(Production production) async {
+    final result = await ProductionDB.db.insert(production);
+
+    setState(() {
+      widget._productions.add(result);
+    });
   }
 }

@@ -8,6 +8,9 @@
 .buildlog/
 .history
 .svn/
+*.plist
+*.xcworkspacedata
+*.pbxproj
 
 # IntelliJ related
 *.iml

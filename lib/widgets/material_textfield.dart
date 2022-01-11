@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 class MaterialTextFormField extends StatefulWidget {
   final _textEditingController = TextEditingController();
   final _textFormKey = GlobalKey<FormState>();
+  final GlobalKey<MaterialTextFormFieldState> state;
   final String textHint;
   final String textError;
 
-  MaterialTextFormField({required this.textHint, required this.textError});
+  MaterialTextFormField({required this.state, required this.textHint, required this.textError});
 
   @override
   State<StatefulWidget> createState() {

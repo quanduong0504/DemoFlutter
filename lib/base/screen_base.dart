@@ -1,11 +1,11 @@
 
-import 'dart:ffi';
-
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class WidgetBase<T extends StatefulWidget> extends State<T> {
   static final String PREFS_PRODUCTION = "PREFS_PRODUCTION";
+  static final String apiKey = '2d99d6c5f9eaeac7ee8f600164f06e18';
 
   void pushScreen(StatefulWidget screen) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
@@ -35,10 +35,10 @@ abstract class WidgetBase<T extends StatefulWidget> extends State<T> {
       case String:
         result(prefs.getString(key));
         break;
-      case Double:
+      case double:
         result(prefs.getDouble(key));
         break;
-      case Bool:
+      case bool:
         result(prefs.getBool(key));
         break;
       default:
@@ -62,10 +62,10 @@ abstract class WidgetBase<T extends StatefulWidget> extends State<T> {
       case int:
         result = await prefs.setInt(key, data);
         break;
-      case Double:
+      case double:
         result = await prefs.setDouble(key, data);
         break;
-      case Bool:
+      case bool:
         result = await prefs.setBool(key, data);
         break;
       default:
@@ -87,5 +87,11 @@ abstract class WidgetBase<T extends StatefulWidget> extends State<T> {
     ScaffoldMessenger.of(context)
                      ..removeCurrentSnackBar()
                      ..showSnackBar(snackBar);
+  }
+
+  getAsync(String path, Map<String, dynamic>? params, Function response) async {
+    final rp = await Dio().get(path, queryParameters: params);
+
+    response(rp);
   }
 }
