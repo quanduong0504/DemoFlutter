@@ -32,13 +32,13 @@ class ProductionDB {
     final db = await database;
     final maxIdResult =
         await db.rawQuery("SELECT MAX(id)+1 as last_inserted_id FROM $productTableName");
-    final id = maxIdResult.first["last_inserted_id"];
+    var id = maxIdResult.first["last_inserted_id"];
     await db.rawInsert(
       "INSERT INTO Product (id, title, subTitle, name, price, isFavorite)"
       " VALUES (?, ?, ?, ?, ?, ?)",
       [id, production.title, production.subTitle, production.name, production.price, production.isFavorite ? 1 : 2]
     );
-    production.id = id! as int;
+    production.id = (id ??= 0) as int;
     return production;
   }
 
