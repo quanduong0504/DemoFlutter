@@ -3,13 +3,21 @@ import 'package:exercise_example/base/screen_base.dart';
 import 'package:flutter/material.dart';
 
 class MaterialTextFormField extends StatefulWidget {
-  final _textEditingController = TextEditingController();
-  final _textFormKey = GlobalKey<FormState>();
-  final GlobalKey<MaterialTextFormFieldState> state;
   final String textHint;
   final String textError;
+  final EdgeInsets padding;
+  final InputStyle inputStyle;
 
-  MaterialTextFormField({required this.state, required this.textHint, required this.textError});
+  MaterialTextFormField(
+      {
+        required this.inputStyle,
+        required this.textHint,
+        required this.textError,
+        required this.padding,
+        bool? isPassword,
+        Key? key
+      }
+  ) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -17,33 +25,49 @@ class MaterialTextFormField extends StatefulWidget {
   }
 }
 
-class MaterialTextFormFieldState extends WidgetBase<MaterialTextFormField> {
+class MaterialTextFormFieldState extends BaseState<MaterialTextFormField> {
+  final _textEditingController = TextEditingController();
+  final _textFormKey = GlobalKey<FormState>();
+
   bool validator() {
-    return widget._textFormKey.currentState!.validate();
+    return _textFormKey.currentState?.validate() ?? false;
   }
 
   String getText() {
-    return widget._textEditingController.text;
+    return _textEditingController.text;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: widget._textFormKey,
-      child: TextFormField(
-        controller: widget._textEditingController,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          labelText: widget.textHint
+    return Padding(
+      padding: widget.padding,
+      child: Form(
+        key: _textFormKey,
+        child: TextFormField(
+          // obscureText: ,
+          enableSuggestions: false,
+          autocorrect: false,
+          controller: _textEditingController,
+          decoration: InputDecoration(
+              border: widget.inputStyle == InputStyle.UNDERLINE ? UnderlineInputBorder() : OutlineInputBorder(),
+              labelText: widget.textHint
+          ),
+          validator: (value) => _onValidate(value),
         ),
-        validator: (value) {
-          if(value == null || value.isEmpty) {
-            return widget.textError;
-          }
-
-          return null;
-        },
-      ),
+      )
     );
   }
+
+  String? _onValidate(String? value) {
+    if(value == null || value.isEmpty) {
+      return widget.textError;
+    }
+
+    return null;
+  }
+}
+
+enum InputStyle {
+  UNDERLINE,
+  OUTLINE
 }

@@ -4,20 +4,25 @@ import 'package:exercise_example/database/database.dart';
 import 'package:exercise_example/events/production_event.dart';
 import 'package:exercise_example/models/product.dart';
 import 'package:exercise_example/models/product_actions.dart';
+import 'package:exercise_example/models/user.dart';
 import 'package:exercise_example/scenes/add_product.dart';
 import 'package:exercise_example/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
+  final User user;
   final List<Production> _productions = <Production>[];
+
+  HomeScreen(this.user);
 
   @override
   State<StatefulWidget> createState() {
+    print('xin chao, ${user.fullName}');
     return _HomeScreen();
   }
 }
 
-class _HomeScreen extends WidgetBase<HomeScreen> {
+class _HomeScreen extends BaseState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
@@ -85,15 +90,6 @@ class _HomeScreen extends WidgetBase<HomeScreen> {
         widget._productions.removeAt(index);
       });
     }
-  }
-
-  void _getWeatherData() {
-    final params = Map<String, dynamic>();
-    params[''] = 0;
-
-    getAsync('https://api.openweathermap.org/data/2.5/onecall', params, (r) {
-
-    });
   }
 
   void _onAddResult(Production production) async {

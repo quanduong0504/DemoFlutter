@@ -16,7 +16,7 @@ class DetailProduct extends StatefulWidget {
   }
 }
 
-class _DetailProduct extends WidgetBase<DetailProduct> {
+class _DetailProduct extends BaseState<DetailProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

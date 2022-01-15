@@ -32,7 +32,8 @@ class AddProductScreen extends StatefulWidget {
   }
 }
 
-class _AddProductScreen extends WidgetBase<AddProductScreen> {
+class _AddProductScreen extends BaseState<AddProductScreen> {
+  final _priceKey = GlobalKey<MaterialTextFormFieldState>();
 
   Production _getProductFromInput() {
     return Production(
@@ -45,7 +46,8 @@ class _AddProductScreen extends WidgetBase<AddProductScreen> {
     final isValidatorTitle = widget._titleValidateKey.currentState!.validate();
     final isValidatorSubTitle = widget._subTitleValidateKey.currentState!.validate();
     final isValidatorName = widget._nameValidateKey.currentState!.validate();
-    final isValidatorPrice = widget._priceValidateKey.currentState!.validate();
+    // final isValidatorPrice = widget._priceValidateKey.currentState!.validate();
+    final isValidatorPrice = _priceKey.currentState?.validator() ?? false;
 
     if(isValidatorTitle && isValidatorSubTitle && isValidatorName && isValidatorPrice) {
       Navigator.pop(context, _getProductFromInput());
@@ -117,21 +119,27 @@ class _AddProductScreen extends WidgetBase<AddProductScreen> {
                     ),
                   )
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  child: Form(
-                    key: widget._priceValidateKey,
-                    child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      controller: widget._priceEditingController,
-                      decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          labelText: 'Price'
-                      ),
-                      validator: (value) => _onValidate(value, 'Price is required'),
-                    ),
-                  )
-                ),
+                MaterialTextFormField(
+                    inputStyle: InputStyle.UNDERLINE,
+                    textHint: 'Price',
+                    textError: 'Price is required',
+                    padding: EdgeInsets.symmetric(horizontal: 12),
+                    key: _priceKey),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+                //   child: Form(
+                //     key: widget._priceValidateKey,
+                //     child: TextFormField(
+                //       keyboardType: TextInputType.number,
+                //       controller: widget._priceEditingController,
+                //       decoration: const InputDecoration(
+                //           border: UnderlineInputBorder(),
+                //           labelText: 'Price'
+                //       ),
+                //       validator: (value) => _onValidate(value, 'Price is required'),
+                //     ),
+                //   )
+                // ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                   child: OutlinedButton(onPressed: () {

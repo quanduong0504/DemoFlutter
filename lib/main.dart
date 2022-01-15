@@ -1,3 +1,4 @@
+import 'package:exercise_example/scenes/new_login.dart';
 import 'package:flutter/material.dart';
 
 import 'scenes/login.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
+      home: NewLoginScreen(),
     );
   }
 }

@@ -13,7 +13,7 @@ class ProductItem extends StatefulWidget {
   final GlobalKey _optionsKey = GlobalKey();
   final Function onItemListener;
 
-  ProductItem(this._production, this.onItemListener);
+  ProductItem(this._production, this.onItemListener, {Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +21,7 @@ class ProductItem extends StatefulWidget {
   }
 }
 
-class _ProductItem extends WidgetBase<ProductItem> {
+class _ProductItem extends BaseState<ProductItem> {
   void _showPopupMenu(Offset position) async {
     final result = await showMenu(
         context: context,

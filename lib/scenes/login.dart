@@ -1,7 +1,15 @@
+import 'dart:convert';
+
+import 'package:exercise_example/base/base_response.dart';
 import 'package:exercise_example/base/screen_base.dart';
-import 'package:exercise_example/scenes/home.dart';
+import 'package:exercise_example/blocs/login_bloc.dart';
+import 'package:exercise_example/models/user.dart';
+import 'package:exercise_example/network/network_module.dart';
 import 'package:exercise_example/scenes/registration.dart';
+import 'package:exercise_example/widgets/material_textfield.dart';
 import 'package:flutter/material.dart';
+
+import 'home.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen() : super();
@@ -12,16 +20,32 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class _LoginScreen extends WidgetBase<LoginScreen> {
-  final _usernameFormKey = GlobalKey<FormState>();
-  final _passwordFormKey = GlobalKey<FormState>();
+class _LoginScreen extends BaseState<LoginScreen> {
+  final loginBloc = LoginBloc();
+  final _usernameEditingController = TextEditingController();
+  final _passwordEditingController = TextEditingController();
+
+  Future<BaseResponse<User>> _doOnLogin() async {
+    final result = await NetworkModule().post<User>(NetworkModule.LOGIN, json.encode({
+      'userName': _usernameEditingController.text,
+      'password': _passwordEditingController.text
+    }));
+
+    if(result.isSuccess) {
+      pushScreen(HomeScreen(result.data));
+    } else {
+      print(result.message);
+    }
+
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login Screen'), actions: [IconButton(onPressed: () {
-        pushScreen(RegisterScreen());
-      }, icon: Icon(Icons.app_registration))]),
+      // appBar: AppBar(title: const Text('Login Screen'), actions: [IconButton(onPressed: () {
+      //   pushScreen(RegisterScreen());
+      // }, icon: Icon(Icons.app_registration))]),
       body: Stack(
         children: [
           Image.network(
@@ -44,53 +68,38 @@ class _LoginScreen extends WidgetBase<LoginScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                      child: Form(
-                        key: _usernameFormKey,
-                        child: TextFormField(
-                          decoration: const InputDecoration(
+                      child: StreamBuilder(
+                        stream: loginBloc.userStream,
+                        builder: (context, snapshot) => TextFormField(
+                          controller: _usernameEditingController,
+                          decoration: InputDecoration(
+                              errorText: snapshot.hasError ? snapshot.error.toString() : null,
                               border: UnderlineInputBorder(),
                               labelText: 'Enter your username'
                           ),
-                          validator: (value) {
-                            if(value == null || value.trim().isEmpty) {
-                              return 'Username is required';
-                            }
-
-                            return null;
-                          },
-                        ),
-                      )
+                      ))
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 3),
-                      child: Form(
-                        key: _passwordFormKey,
-                        child: TextFormField(
+                      child: StreamBuilder(
+                        stream: loginBloc.passwordStream,
+                        builder: (context, snapshot) => TextFormField(
+                          controller: _passwordEditingController,
                           obscureText: true,
                           enableSuggestions: false,
                           autocorrect: false,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
+                              errorText: snapshot.hasError ? snapshot.error.toString() : null,
                               border: UnderlineInputBorder(),
                               labelText: 'Enter your password'
                           ),
-                          validator: (value) {
-                            if(value == null || value.trim().isEmpty) {
-                              return 'Password is required';
-                            }
-
-                            return null;
-                          },
-                        ),
-                      )
+                      ))
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
                       child: OutlinedButton(onPressed: () {
-                        final isPassUser = _usernameFormKey.currentState!.validate();
-                        final isPassPassword = _passwordFormKey.currentState!.validate();
-
-                        if (isPassUser && isPassPassword) {
-                          pushScreen(HomeScreen());
+                        if(loginBloc.isValidInfo(_usernameEditingController.text, _passwordEditingController.text)) {
+                          _doOnLogin();
                         }
                       }, child: Text('Submit')),
                     )

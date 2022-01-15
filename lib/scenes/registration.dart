@@ -9,7 +9,7 @@ class RegisterScreen extends StatefulWidget {
   }
 }
 
-class _RegisterScreen extends WidgetBase<RegisterScreen> {
+class _RegisterScreen extends BaseState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
