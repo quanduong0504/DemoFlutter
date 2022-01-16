@@ -3,7 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:exercise_example/base/base_response.dart';
 import 'package:exercise_example/database/preferences.dart';
 
-const baseUrl = 'http://192.168.100.74:8080/api/v1/';
+const baseUrl = 'http://192.168.31.81:8080/api/v1/';
 final getLink = (link) => "$baseUrl$link";
 final authorization = (token) => "Bearer $token";
 class NetworkModule {
@@ -38,7 +38,7 @@ class NetworkModule {
 
   Future _addHeaders(Dio dio) async {
     if(this.isSetToken) {
-      String token = await Prefs().getPrefs(PREFS_TAKEN);
+      String token = await Prefs().getString(PREFS_TAKEN);
 
       if(token.isNotEmpty) {
         dio.options.headers['content-Type'] = 'application/json';

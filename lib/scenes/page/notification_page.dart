@@ -2,18 +2,19 @@
 import 'package:exercise_example/base/screen_base.dart';
 import 'package:flutter/material.dart';
 
-class NewFeedPage extends StatefulWidget {
+class NotificationPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _NewFeedPage();
+    return _NotificationPageState();
   }
 }
 
-class _NewFeedPage extends BaseState<NewFeedPage> {
+class _NotificationPageState extends BaseState<NotificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(child: Text('New Feed'))
+        backgroundColor: Colors.black12,
+        body: Center(child: Text('Notification'))
     );
   }
 

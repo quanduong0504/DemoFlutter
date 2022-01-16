@@ -2,18 +2,20 @@
 import 'package:exercise_example/base/screen_base.dart';
 import 'package:flutter/material.dart';
 
-class HomePage extends StatefulWidget {
+class NewFeedPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _HomePage();
+    return _NewFeedPageState();
   }
 }
 
-class _HomePage extends BaseState<HomePage> {
+class _NewFeedPageState extends BaseState<NewFeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: Text('Home'))
+        backgroundColor: Colors.black12,
+        body: Center(child: Text('New Feed'))
     );
   }
+
 }

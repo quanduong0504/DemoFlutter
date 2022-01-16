@@ -1,4 +1,6 @@
 
+import 'package:exercise_example/base/base_response.dart';
+
 class User {
   int id;
   String userName;
@@ -39,4 +41,34 @@ class User {
         parsedJson['token']
     );
   }
+
+  factory User.fromLocalJson(Map parsedJson) {
+    return User.create(
+        parsedJson['id'],
+        parsedJson['userName'],
+        parsedJson['gender'],
+        parsedJson['email'],
+        parsedJson['avatar'],
+        parsedJson['phone'],
+        parsedJson['fullName'],
+        parsedJson['facebookId'],
+        parsedJson['googleId'],
+        parsedJson['permission'],
+        parsedJson['token']
+    );
+  }
+
+  Map toJson() => {
+    'id': id,
+    'userName': userName,
+    'gender': gender,
+    'email': email,
+    'avatar': avatar,
+    'phone': phone,
+    'fullName': fullName,
+    'facebookId': facebookId,
+    'googleId': googleId,
+    'permission': permission,
+    'token': token
+  };
 }

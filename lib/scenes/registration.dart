@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 class RegisterScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _RegisterScreen();
+    return _RegisterScreenState();
   }
 }
 
-class _RegisterScreen extends BaseState<RegisterScreen> {
+class _RegisterScreenState extends BaseState<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

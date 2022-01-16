@@ -7,6 +7,8 @@ class MaterialTextFormField extends StatefulWidget {
   final String textError;
   final EdgeInsets padding;
   final InputStyle inputStyle;
+  bool isPassword = false;
+  bool isShowEndIcon = false;
 
   MaterialTextFormField(
       {
@@ -17,7 +19,10 @@ class MaterialTextFormField extends StatefulWidget {
         bool? isPassword,
         Key? key
       }
-  ) : super(key: key);
+  ) : super(key: key) {
+   this.isPassword = isPassword ?? false;
+   this.isShowEndIcon = isPassword ?? false;
+  }
 
   @override
   State<StatefulWidget> createState() {
@@ -37,6 +42,12 @@ class MaterialTextFormFieldState extends BaseState<MaterialTextFormField> {
     return _textEditingController.text;
   }
 
+  void _toggle() {
+    setState(() {
+      widget.isPassword = !widget.isPassword;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -44,13 +55,17 @@ class MaterialTextFormFieldState extends BaseState<MaterialTextFormField> {
       child: Form(
         key: _textFormKey,
         child: TextFormField(
-          // obscureText: ,
+          obscureText: widget.isPassword,
           enableSuggestions: false,
           autocorrect: false,
           controller: _textEditingController,
           decoration: InputDecoration(
               border: widget.inputStyle == InputStyle.UNDERLINE ? UnderlineInputBorder() : OutlineInputBorder(),
-              labelText: widget.textHint
+              labelText: widget.textHint,
+              suffixIcon: widget.isShowEndIcon ? GestureDetector(
+                onTap: () => _toggle(),
+                child: Icon(widget.isPassword ? Icons.visibility : Icons.visibility_off)
+              ) : null
           ),
           validator: (value) => _onValidate(value),
         ),

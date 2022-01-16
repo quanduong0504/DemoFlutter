@@ -28,11 +28,11 @@ class AddProductScreen extends StatefulWidget {
       _nameEditingController.text = this._production!.name;
       _priceEditingController.text = this._production!.price;
     }
-    return _AddProductScreen();
+    return _AddProductState();
   }
 }
 
-class _AddProductScreen extends BaseState<AddProductScreen> {
+class _AddProductState extends BaseState<AddProductScreen> {
   final _priceKey = GlobalKey<MaterialTextFormFieldState>();
 
   Production _getProductFromInput() {

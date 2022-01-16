@@ -12,11 +12,11 @@ class DetailProduct extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return _DetailProduct();
+    return _DetailProductState();
   }
 }
 
-class _DetailProduct extends BaseState<DetailProduct> {
+class _DetailProductState extends BaseState<DetailProduct> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

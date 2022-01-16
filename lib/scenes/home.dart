@@ -10,19 +10,19 @@ import 'package:exercise_example/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  final User user;
+  final User? user;
   final List<Production> _productions = <Production>[];
 
   HomeScreen(this.user);
 
   @override
   State<StatefulWidget> createState() {
-    print('xin chao, ${user.fullName}');
-    return _HomeScreen();
+    print('xin chao, ${user?.fullName}');
+    return _HomeScreenState();
   }
 }
 
-class _HomeScreen extends BaseState<HomeScreen> {
+class _HomeScreenState extends BaseState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(

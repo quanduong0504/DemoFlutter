@@ -2,18 +2,19 @@
 import 'package:exercise_example/base/screen_base.dart';
 import 'package:flutter/material.dart';
 
-class NotificationPage extends StatefulWidget {
+class FavoritePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _NotificationPage();
+    return _FavoritePageState();
   }
 }
 
-class _NotificationPage extends BaseState<NotificationPage> {
+class _FavoritePageState extends BaseState<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(child: Text('Notification'))
+        backgroundColor: Colors.black12,
+        body: Center(child: Text('Favorite'))
     );
   }
 
