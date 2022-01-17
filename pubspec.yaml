@@ -71,6 +71,12 @@ flutter:
        fonts:
          - asset: assets/fonts/Merienda-Bold.ttf
          - asset: assets/fonts/Merienda-Regular.ttf
+     - family: Ubuntu
+       fonts:
+         - asset: assets/fonts/Ubuntu-MediumItalic.ttf
+     - family: BalsamiqSans
+       fonts:
+         - asset: assets/fonts/BalsamiqSans-Bold.ttf
   #           style: italic
   #   - family: Trajan Pro
   #     fonts:

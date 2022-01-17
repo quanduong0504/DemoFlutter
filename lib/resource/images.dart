@@ -9,4 +9,9 @@ class ImagesResource {
   static final String ic_credit_card_chip = path('ic_credit_card_chip.png');
   static final String ic_bank = path('ic_bank.png');
   static final String bg_wave = path('bg_wave.png');
+  static final String ic_info = path('ic_info.png');
+  static final String ic_folder = path('ic_folder.png');
+  static final String ic_user = path('ic_user.png');
+  static final String ic_navigate_next = path('ic_navigate_next.png');
+  static final String ic_logout = path('ic_logout.png');
 }

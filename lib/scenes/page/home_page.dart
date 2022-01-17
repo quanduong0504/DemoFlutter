@@ -63,15 +63,7 @@ class _HomePageState extends BaseState<HomePage> {
                           ],
                         )
                       ),
-                      Container(
-                        height: 50,
-                        color: Color.fromRGBO(110, 52, 139, 1)
-                      ),
-                      Container(
-                          height: 50,
-                          color: Color.fromRGBO(110, 52, 139, 1)
-                      ),
-                      // Image(image: AssetImage(ImagesResource.bg_wave), fit: BoxFit.fitHeight)
+                      Image(image: AssetImage(ImagesResource.bg_wave), fit: BoxFit.fitHeight)
                     ]
                 );
               } else {

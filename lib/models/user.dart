@@ -58,6 +58,10 @@ class User {
     );
   }
 
+  factory User.fake() {
+    return User.create(1, 'Quandq', 1, 'quandq@biplus.com.vn', '', '0919191919', 'Quan Quoc', null, null, 100, 'aaslkdajlksjdlakjzxcnlkn');
+  }
+
   Map toJson() => {
     'id': id,
     'userName': userName,

@@ -27,23 +27,25 @@ class _NewLoginScreenState extends BaseState<NewLoginScreen> {
   final _passwordKey = GlobalKey<MaterialTextFormFieldState>();
 
   void _doOnLogin() async {
-    final result = await NetworkModule().post<User>(NetworkModule.LOGIN, json.encode({
-      'userName': _userKey.currentState!.getText(),
-      'password': _passwordKey.currentState!.getText()
-    }));
-
-    setState(() {
-      _isLoading = false;
-    });
-
-    if(result.isSuccess) {
-      final prefs = Prefs();
-      prefs.put(PREFS_USER, json.encode(result.data?.toJson()));
-      prefs.put(PREFS_TAKEN, result.data?.token);
-      pushScreen(NewMainScreen());
-    } else {
-      showSnackBar(result.message);
-    }
+    Prefs().put(PREFS_USER, json.encode(User.fake()));
+    pushScreen(NewMainScreen());
+    // final result = await NetworkModule().post<User>(NetworkModule.LOGIN, json.encode({
+    //   'userName': _userKey.currentState!.getText(),
+    //   'password': _passwordKey.currentState!.getText()
+    // }));
+    //
+    // setState(() {
+    //   _isLoading = false;
+    // });
+    //
+    // if(result.isSuccess) {
+    //   final prefs = Prefs();
+    //   prefs.put(PREFS_USER, json.encode(result.data?.toJson()));
+    //   prefs.put(PREFS_TAKEN, result.data?.token);
+    //   pushScreen(NewMainScreen());
+    // } else {
+    //   showSnackBar(result.message);
+    // }
   }
 
   @override
