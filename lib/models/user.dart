@@ -1,5 +1,6 @@
 
 import 'package:exercise_example/base/base_response.dart';
+import 'package:exercise_example/resource/images.dart';
 
 class User {
   int id;
@@ -59,7 +60,7 @@ class User {
   }
 
   factory User.fake() {
-    return User.create(1, 'Quandq', 1, 'quandq@biplus.com.vn', '', '0919191919', 'Quan Quoc', null, null, 100, 'aaslkdajlksjdlakjzxcnlkn');
+    return User.create(1, 'Quandq', 1, 'quandq@biplus.com.vn', ImagesResource.bg_payment_card, '0919191919', 'Quan Quoc', null, null, 100, 'aaslkdajlksjdlakjzxcnlkn');
   }
 
   Map toJson() => {

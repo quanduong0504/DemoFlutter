@@ -14,4 +14,9 @@ class ImagesResource {
   static final String ic_user = path('ic_user.png');
   static final String ic_navigate_next = path('ic_navigate_next.png');
   static final String ic_logout = path('ic_logout.png');
+  static final String bg_profile_header = path('bg_profile_header.png');
+  static final String ic_like_colors = path('ic_like_colors.png');
+  static final String ic_like = path('ic_like.png');
+  static final String ic_comment = path('ic_comment.png');
+  static final String ic_share = path('ic_share.png');
 }

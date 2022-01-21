@@ -34,4 +34,18 @@ abstract class BaseState<T extends StatefulWidget> extends State<T> {
 
     response(rp);
   }
+
+  void showPopupMenu(List<PopupMenuItem> items, GlobalKey key, Function resultShowMenu) async {
+    final box = key.currentContext?.findRenderObject() as RenderBox;
+    final position = box.localToGlobal(Offset.zero);
+
+    final result = await showMenu(
+        context: context,
+        position: RelativeRect.fromLTRB(position.dx, position.dy, 0, 0),
+        items: items,
+        elevation: 6
+    );
+
+    resultShowMenu(result);
+  }
 }

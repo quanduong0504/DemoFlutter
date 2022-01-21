@@ -27,6 +27,9 @@ class _NewLoginScreenState extends BaseState<NewLoginScreen> {
   final _passwordKey = GlobalKey<MaterialTextFormFieldState>();
 
   void _doOnLogin() async {
+    setState(() {
+      _isLoading = false;
+    });
     Prefs().put(PREFS_USER, json.encode(User.fake()));
     pushScreen(NewMainScreen());
     // final result = await NetworkModule().post<User>(NetworkModule.LOGIN, json.encode({

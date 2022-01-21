@@ -16,7 +16,10 @@ class Strings {
   static const String tab_favorite = 'Favorites';
   static const String tab_notification = 'Notification';
   static const String tab_profile = 'Profile';
-
+  static const String created_by = 'Created by';
+  static const String comment = 'Comment';
+  static const String like = 'Like';
+  static const String share = 'Share';
 
   static final List<ProfileMenuItem> menuItems = <ProfileMenuItem>[
     ProfileMenuItem(ImagesResource.ic_folder, 'My Profile'),
